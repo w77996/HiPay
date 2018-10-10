@@ -1,0 +1,15 @@
+.gradle/
+.idea/
+out/
+.settings/
+build/
+classes/
+*.iml
+*.log
+*.gz
+*.pyc
+/sbin
+.DS_Store
+.classpath
+.project
+bin
