@@ -3,9 +3,11 @@ package com.w77996.pay.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.w77996.common.constant.PayConstant;
+import com.w77996.pay.service.IMchInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,8 @@ import java.awt.*;
 public class PyOrderController {
 
 
+    @Autowired
+    private IMchInfoService mchInfoService;
     /**
      * 统一下单接口:
      * 1)先验证接口参数以及签名信息
@@ -159,6 +163,55 @@ public class PyOrderController {
             return errorMessage;
         }
         //查询商户信息
-        return null;
+        JSONObject mchInfo = mchInfoService.getByMchId(mchId);
+        if(mchInfo == null) {
+            errorMessage = "Can't found mchInfo[mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+        if(mchInfo.getByte("state") != 1) {
+            errorMessage = "mchInfo not available [mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+        String reqKey = mchInfo.getString("reqKey");
+        if (StringUtils.isBlank(reqKey)) {
+            errorMessage = "reqKey is null[mchId="+mchId+"] record in db.";
+            return errorMessage;
+        }
+        payContext.put("resKey", mchInfo.getString("resKey"));
+
+        // 查询商户对应的支付渠道
+//        JSONObject payChannel = payChannelService.getByMchIdAndChannelId(mchId, channelId);
+//        if(payChannel == null) {
+//            errorMessage = "Can't found payChannel[channelId="+channelId+",mchId="+mchId+"] record in db.";
+//            return errorMessage;
+//        }
+//        if(payChannel.getByte("state") != 1) {
+//            errorMessage = "channel not available [channelId="+channelId+",mchId="+mchId+"]";
+//            return errorMessage;
+//        }
+        // 验证签名数据
+        boolean verifyFlag = XXPayUtil.verifyPaySign(params, reqKey);
+        if(!verifyFlag) {
+            errorMessage = "Verify XX pay sign failed.";
+            return errorMessage;
+        }
+        // 验证参数通过,返回JSONObject对象
+        JSONObject payOrder = new JSONObject();
+        payOrder.put("payOrderId", MySeq.getPay());
+        payOrder.put("mchId", mchId);
+        payOrder.put("mchOrderNo", mchOrderNo);
+        payOrder.put("channelId", channelId);
+        payOrder.put("amount", Long.parseLong(amount));
+        payOrder.put("currency", currency);
+        payOrder.put("clientIp", clientIp);
+        payOrder.put("device", device);
+        payOrder.put("subject", subject);
+        payOrder.put("body", body);
+        payOrder.put("extra", extra);
+        payOrder.put("channelMchId", payChannel.getString("channelMchId"));
+        payOrder.put("param1", param1);
+        payOrder.put("param2", param2);
+        payOrder.put("notifyUrl", notifyUrl);
+        return payOrder;
     }
 }
