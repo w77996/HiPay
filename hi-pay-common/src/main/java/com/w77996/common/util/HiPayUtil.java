@@ -23,27 +23,27 @@ public class HiPayUtil {
      * @param errCodeDesc
      * @return
      */
-    public static Map<String, Object> makeRetMap(String retCode, String retMsg, String resCode, String errCode, String errCodeDesc) {
-        Map<String, Object> retMap = new HashMap<String, Object>();
-        if(retCode != null) retMap.put(PayConstant.RETURN_PARAM_RETCODE, retCode);
-        if(retMsg != null) retMap.put(PayConstant.RETURN_PARAM_RETMSG, retMsg);
-        if(resCode != null) retMap.put(PayConstant.RESULT_PARAM_RESCODE, resCode);
-        if(errCode != null) retMap.put(PayConstant.RESULT_PARAM_ERRCODE, errCode);
-        if(errCodeDesc != null) retMap.put(PayConstant.RESULT_PARAM_ERRCODEDES, errCodeDesc);
-        return retMap;
-    }
-
-    public static Map<String, Object> makeRetMap(String retCode, String retMsg, String resCode, PayEnum payEnum) {
-        Map<String, Object> retMap = new HashMap<String, Object>();
-        if(retCode != null) retMap.put(PayConstant.RETURN_PARAM_RETCODE, retCode);
-        if(retMsg != null) retMap.put(PayConstant.RETURN_PARAM_RETMSG, retMsg);
-        if(resCode != null) retMap.put(PayConstant.RESULT_PARAM_RESCODE, resCode);
-        if(payEnum != null) {
-            retMap.put(PayConstant.RESULT_PARAM_ERRCODE, payEnum.getCode());
-            retMap.put(PayConstant.RESULT_PARAM_ERRCODEDES, payEnum.getMessage());
-        }
-        return retMap;
-    }
+//    public static Map<String, Object> makeRetMap(String retCode, String retMsg, String resCode, String errCode, String errCodeDesc) {
+//        Map<String, Object> retMap = new HashMap<String, Object>();
+//        if(retCode != null) retMap.put(PayConstant.RETURN_PARAM_RETCODE, retCode);
+//        if(retMsg != null) retMap.put(PayConstant.RETURN_PARAM_RETMSG, retMsg);
+//        if(resCode != null) retMap.put(PayConstant.RESULT_PARAM_RESCODE, resCode);
+//        if(errCode != null) retMap.put(PayConstant.RESULT_PARAM_ERRCODE, errCode);
+//        if(errCodeDesc != null) retMap.put(PayConstant.RESULT_PARAM_ERRCODEDES, errCodeDesc);
+//        return retMap;
+//    }
+//
+//    public static Map<String, Object> makeRetMap(String retCode, String retMsg, String resCode, PayEnum payEnum) {
+//        Map<String, Object> retMap = new HashMap<String, Object>();
+//        if(retCode != null) retMap.put(PayConstant.RETURN_PARAM_RETCODE, retCode);
+//        if(retMsg != null) retMap.put(PayConstant.RETURN_PARAM_RETMSG, retMsg);
+//        if(resCode != null) retMap.put(PayConstant.RESULT_PARAM_RESCODE, resCode);
+//        if(payEnum != null) {
+//            retMap.put(PayConstant.RESULT_PARAM_ERRCODE, payEnum.getCode());
+//            retMap.put(PayConstant.RESULT_PARAM_ERRCODEDES, payEnum.getMessage());
+//        }
+//        return retMap;
+//    }
 
     /**
      * 验证支付中心签名

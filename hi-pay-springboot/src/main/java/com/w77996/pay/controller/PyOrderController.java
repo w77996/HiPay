@@ -3,6 +3,8 @@ package com.w77996.pay.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.w77996.common.constant.PayConstant;
+import com.w77996.common.util.HiPayUtil;
+import com.w77996.common.util.MySeq;
 import com.w77996.pay.service.IMchInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -190,7 +192,7 @@ public class PyOrderController {
 //            return errorMessage;
 //        }
         // 验证签名数据
-        boolean verifyFlag = XXPayUtil.verifyPaySign(params, reqKey);
+        boolean verifyFlag = HiPayUtil.verifyPaySign(params, reqKey);
         if(!verifyFlag) {
             errorMessage = "Verify XX pay sign failed.";
             return errorMessage;
